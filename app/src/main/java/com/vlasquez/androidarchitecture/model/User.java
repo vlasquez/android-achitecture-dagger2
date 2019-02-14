@@ -1,4 +1,4 @@
-package com.vlasquez.androidarchitecture.models;
+package com.vlasquez.androidarchitecture.model;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;

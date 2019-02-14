@@ -14,6 +14,6 @@ public abstract class ActivityBindingModule {
   @Binds
   @IntoMap
   @ActivityKey(MainActivity.class)
-  abstract AndroidInjector<? extends Activity> provideMainActivityInjector(
+  abstract AndroidInjector.Factory<? extends Activity> provideMainActivityInjector(
       MainActivityComponent.Builder builder);
 }

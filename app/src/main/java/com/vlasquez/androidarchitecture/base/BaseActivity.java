@@ -13,12 +13,14 @@ import com.bluelinelabs.conductor.Router;
 import com.vlasquez.androidarchitecture.R;
 import com.vlasquez.androidarchitecture.di.Injector;
 import com.vlasquez.androidarchitecture.di.ScreenInjector;
+import com.vlasquez.androidarchitecture.ui.ScreenNavigator;
 import java.util.UUID;
 import javax.inject.Inject;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
   @Inject ScreenInjector screenInjector;
+  @Inject ScreenNavigator screenNavigator;
   private static String INSTANCE_ID_KEY = "instance_id";
 
   private String instanceId;
@@ -40,9 +42,12 @@ public abstract class BaseActivity extends AppCompatActivity {
       throw new NullPointerException("Activity must have a view with id: screen_container");
     }
     router = Conductor.attachRouter(this, screenContainer, savedInstanceState);
+    screenNavigator.initWithRouter(router, initialScreen());
     monitorBackStack();
 
   }
+
+  protected abstract Controller initialScreen();
 
   @LayoutRes
   protected abstract int layoutRes();
@@ -58,8 +63,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 
   @Override protected void onDestroy() {
     super.onDestroy();
+    screenNavigator.clear();
     if(isFinishing()){
       Injector.clearComponent(this);
+    }
+  }
+
+  @Override public void onBackPressed() {
+    if (!screenNavigator.pop()) {
+      super.onBackPressed();
     }
   }
 

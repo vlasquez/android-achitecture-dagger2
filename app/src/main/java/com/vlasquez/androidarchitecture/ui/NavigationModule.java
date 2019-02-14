@@ -1,4 +1,11 @@
 package com.vlasquez.androidarchitecture.ui;
 
-public class NavigationModule {
+import dagger.Binds;
+import dagger.Module;
+
+@Module
+public abstract class NavigationModule {
+
+  @Binds
+  abstract ScreenNavigator provideScreenNavigator(DefaultScreenNavigator screenNavigator);
 }
