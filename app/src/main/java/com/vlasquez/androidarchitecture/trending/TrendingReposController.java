@@ -1,15 +1,62 @@
 package com.vlasquez.androidarchitecture.trending;
 
-import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.TextView;
+import butterknife.BindView;
+import com.vlasquez.androidarchitecture.R;
 import com.vlasquez.androidarchitecture.base.BaseController;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import javax.inject.Inject;
+
+import static android.view.View.GONE;
 
 public class TrendingReposController extends BaseController {
+  @Inject TrendingReposPresenter presenter;
+  @Inject TrendingReposViewModel viewModel;
 
-  @NonNull @Override
-  protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
-    return null;
+  @BindView(R.id.repo_list_rv) RecyclerView repoList;
+  @BindView(R.id.loading_pb) View loadingView;
+  @BindView(R.id.error_tv) TextView errorText;
+
+  @Override protected void onViewBound(View view) {
+    repoList.setLayoutManager(new LinearLayoutManager(view.getContext()));
+    repoList.setAdapter(new RepoAdapter(presenter));
+  }
+
+  @Override protected Disposable[] subscriptions() {
+    return new Disposable[] {
+
+        viewModel.loading()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(loading -> {
+          loadingView.setVisibility(loading ? View.VISIBLE : GONE);
+          repoList.setVisibility(loading ? GONE : View.VISIBLE);
+          errorText.setVisibility(loading ? GONE : View.VISIBLE);
+        }),
+
+        viewModel.repos()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(((RepoAdapter) repoList.getAdapter())::setData),
+
+        viewModel.error()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(errorRes -> {
+          if (errorRes == -1) {
+            errorText.setText(null);
+            errorText.setVisibility(GONE);
+          } else {
+            errorText.setVisibility(View.VISIBLE);
+            repoList.setVisibility(GONE);
+            errorText.setText(errorRes);
+          }
+        })
+    };
+  }
+
+  @Override protected int layoutRes() {
+    return R.layout.screen_trending_repos;
   }
 }
