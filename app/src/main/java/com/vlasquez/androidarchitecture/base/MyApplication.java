@@ -1,8 +1,10 @@
 package com.vlasquez.androidarchitecture.base;
 
 import android.app.Application;
+import com.vlasquez.androidarchitecture.BuildConfig;
 import com.vlasquez.androidarchitecture.di.ActivityInjector;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class MyApplication extends Application {
 
@@ -18,6 +20,10 @@ public class MyApplication extends Application {
         .build();
 
     component.inject(this);
+
+    if (BuildConfig.DEBUG) {
+      Timber.plant(new Timber.DebugTree());
+    }
   }
 
   public ActivityInjector getActivityInjector() {
