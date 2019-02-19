@@ -17,7 +17,7 @@ public abstract class Repo {
 
   public abstract User owner();
 
-  @Json(name = "stargazersCount")
+  @Json(name = "stargazers_count")
   public abstract long stargazersCount();
 
   @Json(name = "forks_count")

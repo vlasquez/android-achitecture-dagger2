@@ -35,8 +35,9 @@ ext {
   rxRelayVersion = '2.0.0'
   conductorVersion = '2.1.4'
   threeTenAbpVersion = '1.0.5'
-  timberVersion= '4.5.1'
+  timberVersion = '4.5.1'
   butterknifeVersion = '8.8.1'
+  loggingHttpInterceptorVersion = '3.13.0'
 }
 task clean(type: Delete) {
   delete rootProject.buildDir
