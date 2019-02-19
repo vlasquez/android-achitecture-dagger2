@@ -38,6 +38,7 @@ ext {
   timberVersion = '4.5.1'
   butterknifeVersion = '8.8.1'
   loggingHttpInterceptorVersion = '3.13.0'
+  mockitoVersion = '2.10.0'
 }
 task clean(type: Delete) {
   delete rootProject.buildDir
