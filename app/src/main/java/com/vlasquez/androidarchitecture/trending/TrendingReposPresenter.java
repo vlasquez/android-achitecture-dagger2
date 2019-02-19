@@ -2,10 +2,11 @@ package com.vlasquez.androidarchitecture.trending;
 
 import com.vlasquez.androidarchitecture.data.RepoRequester;
 import com.vlasquez.androidarchitecture.di.ScreenScope;
+import com.vlasquez.androidarchitecture.model.Repo;
 import javax.inject.Inject;
 
 @ScreenScope
-public class TrendingReposPresenter {
+public class TrendingReposPresenter  implements RepoAdapter.RepoClickedListener {
 
   private final TrendingReposViewModel viewModel;
   private final RepoRequester repoRequester;
@@ -24,5 +25,9 @@ public class TrendingReposPresenter {
         .doOnSubscribe(__ -> viewModel.loadingUpdated().accept(true))
         .doOnEvent((data, throwable) -> viewModel.loadingUpdated().accept(false))
         .subscribe(viewModel.reposUpdated(), viewModel.onError());
+  }
+
+  @Override public void onRepoClicked(Repo repo) {
+
   }
 }
