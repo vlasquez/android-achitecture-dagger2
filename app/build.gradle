@@ -9,7 +9,7 @@ android {
     targetSdkVersion rootProject.ext.targetSdkVersion
     versionCode 1
     versionName "1.0"
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    testInstrumentationRunner "com.vlasquez.androidarchitecture.test.CustomTestRunner"
   }
   buildTypes {
     release {
@@ -71,6 +71,9 @@ dependencies {
 
   testImplementation "org.mockito:mockito-core:$mockitoVersion"
   testImplementation 'junit:junit:4.12'
+
+  androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+  androidTestImplementation 'com.android.support.test:rules:1.0.2'
   androidTestImplementation 'com.android.support.test:runner:1.0.2'
   androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }

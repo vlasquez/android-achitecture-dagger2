@@ -10,15 +10,12 @@ public class MyApplication extends Application {
 
   @Inject ActivityInjector activityInjector;
 
-  private ApplicationComponent component;
+  protected ApplicationComponent component;
 
   @Override public void onCreate() {
     super.onCreate();
 
-    component = DaggerApplicationComponent.builder()
-        .applicationModule(new ApplicationModule(this))
-        .build();
-
+    component = initApplicationComponent();
     component.inject(this);
 
     if (BuildConfig.DEBUG) {
@@ -26,6 +23,11 @@ public class MyApplication extends Application {
     }
   }
 
+  protected ApplicationComponent initApplicationComponent() {
+    return DaggerApplicationComponent.builder()
+        .applicationModule(new ApplicationModule(this))
+        .build();
+  }
   public ActivityInjector getActivityInjector() {
     return activityInjector;
   }

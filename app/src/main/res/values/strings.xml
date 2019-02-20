@@ -1,4 +1,7 @@
 <resources>
   <string name="app_name">AndroidArchitecture</string>
   <string name="api_error_repos">An error happened retrieving repos</string>
+  <string name="creation_date_label">Created:</string>
+  <string name="updated_date_label">Last Updated:</string>
+  <string name="contributors_label">Contributors:</string>
 </resources>
