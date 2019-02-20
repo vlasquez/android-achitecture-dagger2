@@ -11,8 +11,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import javax.inject.Inject;
 
-import static android.view.View.GONE;
-
 public class TrendingReposController extends BaseController {
   @Inject TrendingReposPresenter presenter;
   @Inject TrendingReposViewModel viewModel;
@@ -32,9 +30,9 @@ public class TrendingReposController extends BaseController {
         viewModel.loading()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(loading -> {
-          loadingView.setVisibility(loading ? View.VISIBLE : GONE);
-          repoList.setVisibility(loading ? GONE : View.VISIBLE);
-          errorText.setVisibility(loading ? GONE : View.VISIBLE);
+          loadingView.setVisibility(loading ? View.VISIBLE : View.GONE);
+          repoList.setVisibility(loading ? View.GONE : View.VISIBLE);
+          errorText.setVisibility(loading ? View.GONE : errorText.getVisibility());
         }),
 
         viewModel.repos()
@@ -46,10 +44,10 @@ public class TrendingReposController extends BaseController {
             .subscribe(errorRes -> {
           if (errorRes == -1) {
             errorText.setText(null);
-            errorText.setVisibility(GONE);
+            errorText.setVisibility(View.GONE);
           } else {
             errorText.setVisibility(View.VISIBLE);
-            repoList.setVisibility(GONE);
+            repoList.setVisibility(View.GONE);
             errorText.setText(errorRes);
           }
         })
