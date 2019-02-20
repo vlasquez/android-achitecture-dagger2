@@ -1,5 +1,6 @@
 package com.vlasquez.androidarchitecture.data;
 
+import com.vlasquez.androidarchitecture.model.Repo;
 import com.vlasquez.androidarchitecture.test.TestUtils;
 import io.reactivex.Single;
 import java.io.IOException;
@@ -23,6 +24,10 @@ public class TestRepoService implements RepoService {
       return Single.just(response);
     }
     return Single.error(new IOException());
+  }
+
+  @Override public Single<Repo> getRepo(String repoOwner, String repoName) {
+    return null;
   }
 
   public void setSendError(boolean sendError) {

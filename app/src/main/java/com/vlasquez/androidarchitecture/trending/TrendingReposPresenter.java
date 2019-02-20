@@ -1,6 +1,6 @@
 package com.vlasquez.androidarchitecture.trending;
 
-import com.vlasquez.androidarchitecture.data.RepoRequester;
+import com.vlasquez.androidarchitecture.data.RepoRepository;
 import com.vlasquez.androidarchitecture.di.ScreenScope;
 import com.vlasquez.androidarchitecture.model.Repo;
 import javax.inject.Inject;
@@ -9,19 +9,19 @@ import javax.inject.Inject;
 public class TrendingReposPresenter  implements RepoAdapter.RepoClickedListener {
 
   private final TrendingReposViewModel viewModel;
-  private final RepoRequester repoRequester;
+  private final RepoRepository repoRepository;
 
   @Inject
   public TrendingReposPresenter(
       TrendingReposViewModel viewModel,
-      RepoRequester repoRequester) {
+      RepoRepository repoRepository) {
     this.viewModel = viewModel;
-    this.repoRequester = repoRequester;
+    this.repoRepository = repoRepository;
     loadRepos();
   }
 
   private void loadRepos() {
-    repoRequester.getTrendingRepos()
+    repoRepository.getTrendingRepos()
         .doOnSubscribe(__ -> viewModel.loadingUpdated().accept(true))
         .doOnEvent((data, throwable) -> viewModel.loadingUpdated().accept(false))
         .subscribe(viewModel.reposUpdated(), viewModel.onError());

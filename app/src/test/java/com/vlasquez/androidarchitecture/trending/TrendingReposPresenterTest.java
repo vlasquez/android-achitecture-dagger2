@@ -1,6 +1,6 @@
 package com.vlasquez.androidarchitecture.trending;
 
-import com.vlasquez.androidarchitecture.data.RepoRequester;
+import com.vlasquez.androidarchitecture.data.RepoRepository;
 import com.vlasquez.androidarchitecture.data.TrendingReposResponse;
 import com.vlasquez.androidarchitecture.model.Repo;
 import com.vlasquez.androidarchitecture.testUtils.TestUtils;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
  * @since 2/18/19
  **/
 public class TrendingReposPresenterTest {
-  @Mock RepoRequester repoRequester;
+  @Mock RepoRepository repoRepository;
   @Mock TrendingReposViewModel viewModel;
   @Mock Consumer<Throwable> onErrorConsumer;
   @Mock Consumer<List<Repo>> onSuccessConsumer;
@@ -45,7 +45,7 @@ public class TrendingReposPresenterTest {
     List<Repo> repos = setUpSuccess();
     initializePresenter();
 
-    verify(repoRequester).getTrendingRepos();
+    verify(repoRepository).getTrendingRepos();
     verify(onSuccessConsumer).accept(repos);
     verifyZeroInteractions(onErrorConsumer);
   }
@@ -90,18 +90,18 @@ public class TrendingReposPresenterTest {
         TestUtils.loadJson("mock/get_trending_repos.json", TrendingReposResponse.class);
     List<Repo> repos = response.repos();
 
-    when(repoRequester.getTrendingRepos()).thenReturn(Single.just(repos));
+    when(repoRepository.getTrendingRepos()).thenReturn(Single.just(repos));
 
     return repos;
   }
 
   private Throwable setUpError() {
     Throwable error = new IOException();
-    when(repoRequester.getTrendingRepos()).thenReturn(Single.error(error));
+    when(repoRepository.getTrendingRepos()).thenReturn(Single.error(error));
     return error;
   }
 
   private void initializePresenter() {
-    presenter = new TrendingReposPresenter(viewModel, repoRequester);
+    presenter = new TrendingReposPresenter(viewModel, repoRepository);
   }
 }
