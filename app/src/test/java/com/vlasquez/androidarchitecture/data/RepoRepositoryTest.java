@@ -3,6 +3,7 @@ package com.vlasquez.androidarchitecture.data;
 import com.vlasquez.androidarchitecture.model.Repo;
 import com.vlasquez.androidarchitecture.testUtils.TestUtils;
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Provider;
@@ -36,7 +37,7 @@ public class RepoRepositoryTest {
     rxJavaRepo = trendingReposResponse.repos().get(0);
     otherRepo = trendingReposResponse.repos().get(1);
 
-    repository = new RepoRepository(repoRequesterProvider);
+    repository = new RepoRepository(repoRequesterProvider, Schedulers.trampoline());
   }
 
   @Test
