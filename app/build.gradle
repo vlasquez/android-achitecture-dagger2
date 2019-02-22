@@ -68,6 +68,8 @@ dependencies {
   implementation "com.jakewharton:butterknife:$butterknifeVersion"
   annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
+  /** Glide **/
+  implementation "com.github.bumptech.glide:glide:$glideVersion"
 
   testImplementation "org.mockito:mockito-core:$mockitoVersion"
   testImplementation 'junit:junit:4.12'

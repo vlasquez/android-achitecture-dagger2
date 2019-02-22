@@ -39,6 +39,7 @@ ext {
   butterknifeVersion = '8.8.1'
   loggingHttpInterceptorVersion = '3.13.0'
   mockitoVersion = '2.10.0'
+  glideVersion = '4.2.0'
 }
 task clean(type: Delete) {
   delete rootProject.buildDir

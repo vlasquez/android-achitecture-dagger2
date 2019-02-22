@@ -23,6 +23,10 @@ import com.google.auto.value.AutoValue;
   @Nullable
   abstract Integer errorRes();
 
+  boolean isSuccess() {
+    return errorRes() == null;
+  }
+
   static Builder builder() {
     return new AutoValue_RepoDetailState.Builder();
   }
