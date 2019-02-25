@@ -7,7 +7,7 @@ import com.bluelinelabs.conductor.changehandler.FadeChangeHandler;
 import com.vlasquez.androidarchitecture.details.RepoDetailsController;
 import com.vlasquez.androidarchitecture.di.ActivityScope;
 import javax.inject.Inject;
-@ActivityScope
+
 public class DefaultScreenNavigator implements ScreenNavigator {
   private Router router;
 
