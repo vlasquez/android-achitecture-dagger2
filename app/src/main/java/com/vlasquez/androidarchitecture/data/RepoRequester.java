@@ -1,8 +1,8 @@
 package com.vlasquez.androidarchitecture.data;
 
+import com.vlasquez.androidarchitecture.model.Contributor;
 import com.vlasquez.androidarchitecture.model.Repo;
 import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -14,9 +14,16 @@ public class RepoRequester {
     this.repoService = repoService;
   }
 
-  public Single<List<Repo>> getTrendingRepos() {
+  Single<List<Repo>> getTrendingRepos() {
     return repoService.getTrendingRepos()
-        .map(TrendingReposResponse::repos)
-        .subscribeOn(Schedulers.io());
+        .map(TrendingReposResponse::repos);
+  }
+
+  Single<Repo> getRepo(String repoOwner, String repoName) {
+    return repoService.getRepo(repoOwner, repoName);
+  }
+
+  Single<List<Contributor>> getContributors(String contributorUrl) {
+    return repoService.getContributors(contributorUrl);
   }
 }

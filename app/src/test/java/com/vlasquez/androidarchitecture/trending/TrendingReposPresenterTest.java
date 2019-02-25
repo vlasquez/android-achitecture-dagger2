@@ -1,9 +1,10 @@
 package com.vlasquez.androidarchitecture.trending;
 
-import com.vlasquez.androidarchitecture.data.RepoRequester;
+import com.vlasquez.androidarchitecture.data.RepoRepository;
 import com.vlasquez.androidarchitecture.data.TrendingReposResponse;
 import com.vlasquez.androidarchitecture.model.Repo;
 import com.vlasquez.androidarchitecture.testUtils.TestUtils;
+import com.vlasquez.androidarchitecture.ui.ScreenNavigator;
 import io.reactivex.Single;
 import io.reactivex.functions.Consumer;
 import java.io.IOException;
@@ -24,11 +25,12 @@ import static org.mockito.Mockito.when;
  * @since 2/18/19
  **/
 public class TrendingReposPresenterTest {
-  @Mock RepoRequester repoRequester;
+  @Mock RepoRepository repoRepository;
   @Mock TrendingReposViewModel viewModel;
   @Mock Consumer<Throwable> onErrorConsumer;
   @Mock Consumer<List<Repo>> onSuccessConsumer;
   @Mock Consumer<Boolean> loadingConsumer;
+  @Mock ScreenNavigator screenNavigator;
 
   private TrendingReposPresenter presenter;
 
@@ -45,7 +47,7 @@ public class TrendingReposPresenterTest {
     List<Repo> repos = setUpSuccess();
     initializePresenter();
 
-    verify(repoRequester).getTrendingRepos();
+    verify(repoRepository).getTrendingRepos();
     verify(onSuccessConsumer).accept(repos);
     verifyZeroInteractions(onErrorConsumer);
   }
@@ -82,7 +84,12 @@ public class TrendingReposPresenterTest {
 
   @Test
   public void onRepoClicked() throws Exception {
-    //TODO
+    Repo repo = TestUtils.loadJson("mock/get_repo.json",Repo.class);
+    setUpSuccess();
+    initializePresenter();
+    presenter.onRepoClicked(repo);
+
+    verify(screenNavigator).goToRepoDetails(repo.owner().login(),repo.name());
   }
 
   private List<Repo> setUpSuccess() {
@@ -90,18 +97,18 @@ public class TrendingReposPresenterTest {
         TestUtils.loadJson("mock/get_trending_repos.json", TrendingReposResponse.class);
     List<Repo> repos = response.repos();
 
-    when(repoRequester.getTrendingRepos()).thenReturn(Single.just(repos));
+    when(repoRepository.getTrendingRepos()).thenReturn(Single.just(repos));
 
     return repos;
   }
 
   private Throwable setUpError() {
     Throwable error = new IOException();
-    when(repoRequester.getTrendingRepos()).thenReturn(Single.error(error));
+    when(repoRepository.getTrendingRepos()).thenReturn(Single.error(error));
     return error;
   }
 
   private void initializePresenter() {
-    presenter = new TrendingReposPresenter(viewModel, repoRequester);
+    presenter = new TrendingReposPresenter(viewModel, repoRepository,screenNavigator);
   }
 }
