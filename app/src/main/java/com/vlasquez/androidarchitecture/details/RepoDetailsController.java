@@ -19,7 +19,7 @@ public class RepoDetailsController extends BaseController {
   static final String REPO_NAME_KEY = "repo_name";
   static final String REPO_OWNER_KEY = "repo_owner";
 
-  public static Controller newInstance(String repoName, String repoOwner) {
+  public static Controller newInstance(String repoOwner,String repoName) {
     Bundle bundle = new Bundle();
     bundle.putString(REPO_NAME_KEY, repoName);
     bundle.putString(REPO_OWNER_KEY, repoOwner);
