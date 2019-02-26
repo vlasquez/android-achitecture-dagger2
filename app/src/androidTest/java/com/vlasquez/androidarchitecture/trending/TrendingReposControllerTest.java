@@ -5,6 +5,7 @@ import android.support.test.runner.AndroidJUnit4;
 import com.bluelinelabs.conductor.Controller;
 import com.vlasquez.androidarchitecture.R;
 import com.vlasquez.androidarchitecture.base.TestApplication;
+import com.vlasquez.androidarchitecture.data.TestRepoService;
 import com.vlasquez.androidarchitecture.test.ControllerTest;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class TrendingReposControllerTest extends ControllerTest {
 
   @Test
   public void loadRepos() {
-    repoService.setSendError(false);
+    repoService.clearErrorFlags();
     launch();
 
     onView(withId(R.id.loading_pb)).check(
@@ -45,7 +46,7 @@ public class TrendingReposControllerTest extends ControllerTest {
 
   @Test
   public void loadReposError() {
-    repoService.setSendError(true);
+    repoService.setErrorFlags(TestRepoService.FLAG_TRENDING_REPOS);
     launch();
 
     onView(withId(R.id.loading_pb)).check(
