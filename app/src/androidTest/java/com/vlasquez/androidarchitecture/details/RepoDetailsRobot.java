@@ -26,7 +26,7 @@ class RepoDetailsRobot {
   }
 
   RepoDetailsRobot verifyDescription(String description) {
-    onView(withId(R.id.repo_description_tv)).check(matches(withText(description)));
+    onView(withId(R.id.tv_repo_description)).check(matches(withText(description)));
     return this;
   }
 

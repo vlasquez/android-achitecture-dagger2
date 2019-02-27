@@ -65,7 +65,7 @@ public class RepoDetailsController extends BaseController {
             }
             detailsLoadingView.setVisibility(View.GONE);
             contentContainer.setVisibility(details.isSuccess() ? View.VISIBLE : View.GONE);
-            errorText.setVisibility(details.isSuccess() ? View.VISIBLE : View.GONE);
+            errorText.setVisibility(details.isSuccess() ? View.GONE : View.VISIBLE);
             repoNameText.setText(details.name());
             repoDescriptionText.setText(details.description());
             createdDateText.setText(details.createdDate());
