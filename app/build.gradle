@@ -79,3 +79,19 @@ dependencies {
   androidTestImplementation 'com.android.support.test:runner:1.0.2'
   androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
+
+def mockCopySpec = copySpec {
+  from rootProject.file('app/')
+  include 'mock/'
+}
+
+task copyMock('type': Copy) {
+  ['src/test/resources', 'src/androidTest/resources'].each { dest ->
+    copy {
+      with mockCopySpec
+      into dest
+    }
+  }
+}
+
+build.finalizedBy(copyMock)
