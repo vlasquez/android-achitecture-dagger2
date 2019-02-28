@@ -6,6 +6,7 @@ import com.vlasquez.androidarchitecture.data.TestRepoServiceModule;
 import com.vlasquez.androidarchitecture.networking.ServiceModule;
 import com.vlasquez.androidarchitecture.trending.TrendingReposControllerTest;
 import com.vlasquez.androidarchitecture.ui.NavigationModule;
+import com.vlasquez.androidarchitecture.ui.TestActivityViewInterceptorModule;
 import com.vlasquez.androidarchitecture.ui.TestNavigationModule;
 import com.vlasquez.androidarchitecture.ui.TestScreenNavigator;
 import dagger.Component;
@@ -17,7 +18,8 @@ import javax.inject.Singleton;
     TestActivityBindingModule.class,
     TestRepoServiceModule.class,
     ServiceModule.class,
-    TestNavigationModule.class
+    TestNavigationModule.class,
+    TestActivityViewInterceptorModule.class
 })
 public interface TestApplicationComponent extends ApplicationComponent {
 

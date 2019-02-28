@@ -32,15 +32,8 @@ public abstract class ServiceModule {
   static Retrofit provideRetrofit(Moshi moshi, Call.Factory callFactory,
       @Named("base_url") String baseUrl) {
 
-    HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-    logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-    OkHttpClient client = new OkHttpClient.Builder()
-        .addInterceptor(logging)
-        .build();
-
     return new Retrofit.Builder()
         .callFactory(callFactory)
-        .client(client)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .baseUrl(baseUrl)
