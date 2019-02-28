@@ -68,4 +68,6 @@ fastlane/readme.md
 /build
 /src/androidTest/resources/mock
 /src/test/resources/mock
+/src/debug/assets/mock
+
 

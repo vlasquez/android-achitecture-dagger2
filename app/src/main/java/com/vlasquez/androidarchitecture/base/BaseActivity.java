@@ -13,6 +13,7 @@ import com.bluelinelabs.conductor.Router;
 import com.vlasquez.androidarchitecture.R;
 import com.vlasquez.androidarchitecture.di.Injector;
 import com.vlasquez.androidarchitecture.di.ScreenInjector;
+import com.vlasquez.androidarchitecture.ui.ActivityViewInterceptor;
 import com.vlasquez.androidarchitecture.ui.ScreenNavigator;
 import java.util.UUID;
 import javax.inject.Inject;
@@ -21,6 +22,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
   @Inject ScreenInjector screenInjector;
   @Inject ScreenNavigator screenNavigator;
+  @Inject ActivityViewInterceptor activityViewInterceptor;
   private static String INSTANCE_ID_KEY = "instance_id";
 
   private String instanceId;
@@ -34,9 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity {
       instanceId = UUID.randomUUID().toString();
     }
     Injector.inject(this);
-    super.onCreate(savedInstanceState);
-    setContentView(layoutRes());
-
+    activityViewInterceptor.setContentView(this, layoutRes());
     ViewGroup screenContainer = findViewById(R.id.screen_container);
     if (screenContainer == null) {
       throw new NullPointerException("Activity must have a view with id: screen_container");
@@ -44,6 +44,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     router = Conductor.attachRouter(this, screenContainer, savedInstanceState);
     screenNavigator.initWithRouter(router, initialScreen());
     monitorBackStack();
+    super.onCreate(savedInstanceState);
 
   }
 
@@ -67,6 +68,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     if(isFinishing()){
       Injector.clearComponent(this);
     }
+    activityViewInterceptor.clear();
   }
 
   @Override public void onBackPressed() {
