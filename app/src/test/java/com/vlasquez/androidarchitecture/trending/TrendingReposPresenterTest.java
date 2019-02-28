@@ -84,7 +84,7 @@ public class TrendingReposPresenterTest {
 
   @Test
   public void onRepoClicked() throws Exception {
-    Repo repo = TestUtils.loadJson("mock/get_repo.json",Repo.class);
+    Repo repo = TestUtils.loadJson("mock/repos/get_repo.json",Repo.class);
     setUpSuccess();
     initializePresenter();
     presenter.onRepoClicked(repo);
@@ -94,7 +94,7 @@ public class TrendingReposPresenterTest {
 
   private List<Repo> setUpSuccess() {
     TrendingReposResponse response =
-        TestUtils.loadJson("mock/get_trending_repos.json", TrendingReposResponse.class);
+        TestUtils.loadJson("mock/search/get_trending_repos.json", TrendingReposResponse.class);
     List<Repo> repos = response.repos();
 
     when(repoRepository.getTrendingRepos()).thenReturn(Single.just(repos));
