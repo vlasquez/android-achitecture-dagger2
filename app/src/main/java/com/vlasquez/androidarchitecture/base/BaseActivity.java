@@ -13,16 +13,21 @@ import com.bluelinelabs.conductor.Router;
 import com.vlasquez.androidarchitecture.R;
 import com.vlasquez.androidarchitecture.di.Injector;
 import com.vlasquez.androidarchitecture.di.ScreenInjector;
+import com.vlasquez.androidarchitecture.lifecycle.ActivityLifeCycleTask;
 import com.vlasquez.androidarchitecture.ui.ActivityViewInterceptor;
+import com.vlasquez.androidarchitecture.ui.RouterProvider;
 import com.vlasquez.androidarchitecture.ui.ScreenNavigator;
+import java.util.Set;
 import java.util.UUID;
 import javax.inject.Inject;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements RouterProvider {
 
   @Inject ScreenInjector screenInjector;
   @Inject ScreenNavigator screenNavigator;
   @Inject ActivityViewInterceptor activityViewInterceptor;
+  @Inject Set<ActivityLifeCycleTask> activityLifeCycleTasks;
+
   private static String INSTANCE_ID_KEY = "instance_id";
 
   private String instanceId;
@@ -42,13 +47,44 @@ public abstract class BaseActivity extends AppCompatActivity {
       throw new NullPointerException("Activity must have a view with id: screen_container");
     }
     router = Conductor.attachRouter(this, screenContainer, savedInstanceState);
-    screenNavigator.initWithRouter(router, initialScreen());
     monitorBackStack();
+
+    for (ActivityLifeCycleTask task : activityLifeCycleTasks) {
+      task.onCreate(this);
+    }
     super.onCreate(savedInstanceState);
 
   }
 
-  protected abstract Controller initialScreen();
+  @Override protected void onStart() {
+    super.onStart();
+    for (ActivityLifeCycleTask task : activityLifeCycleTasks) {
+      task.onStart(this);
+    }
+  }
+
+  @Override protected void onPause() {
+    super.onPause();
+    for (ActivityLifeCycleTask task : activityLifeCycleTasks) {
+      task.onPause(this);
+    }
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    for (ActivityLifeCycleTask task : activityLifeCycleTasks) {
+      task.onResume(this);
+    }
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    for (ActivityLifeCycleTask task : activityLifeCycleTasks) {
+      task.onStop(this);
+    }
+  }
+
+  public abstract Controller initialScreen();
 
   @LayoutRes
   protected abstract int layoutRes();
@@ -64,11 +100,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    screenNavigator.clear();
     if(isFinishing()){
       Injector.clearComponent(this);
     }
     activityViewInterceptor.clear();
+
+    for (ActivityLifeCycleTask task : activityLifeCycleTasks) {
+      task.onDestroy(this);
+    }
   }
 
   @Override public void onBackPressed() {
@@ -94,5 +133,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
       }
     });
+  }
+
+  @Override public Router getRouter() {
+    return router;
   }
 }
