@@ -1,7 +1,7 @@
 package com.vlasquez.androidarchitecture.trending;
 
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

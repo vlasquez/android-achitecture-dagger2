@@ -1,6 +1,7 @@
 package com.vlasquez.androidarchitecture.details;
 
 import com.vlasquez.androidarchitecture.base.ScreenModule;
+import com.vlasquez.androidarchitecture.di.ScreenComponent;
 import com.vlasquez.androidarchitecture.di.ScreenScope;
 import dagger.BindsInstance;
 import dagger.Subcomponent;
@@ -9,7 +10,7 @@ import javax.inject.Named;
 
 @ScreenScope
 @Subcomponent(modules = { ScreenModule.class, RepoDetailsScreenModule.class })
-public interface RepoDetailsComponent extends AndroidInjector<RepoDetailsController> {
+public interface RepoDetailsComponent extends ScreenComponent<RepoDetailsController> {
 
   @Subcomponent.Builder
   abstract class Builder extends AndroidInjector.Builder<RepoDetailsController> {

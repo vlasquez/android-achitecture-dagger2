@@ -2,6 +2,7 @@ package com.vlasquez.androidarchitecture.trending;
 
 import com.vlasquez.androidarchitecture.data.RepoRepository;
 import com.vlasquez.androidarchitecture.data.TrendingReposResponse;
+import com.vlasquez.androidarchitecture.lifecycle.DisposableManager;
 import com.vlasquez.androidarchitecture.model.Repo;
 import com.vlasquez.androidarchitecture.testUtils.TestUtils;
 import com.vlasquez.androidarchitecture.ui.ScreenNavigator;
@@ -84,12 +85,12 @@ public class TrendingReposPresenterTest {
 
   @Test
   public void onRepoClicked() throws Exception {
-    Repo repo = TestUtils.loadJson("mock/repos/get_repo.json",Repo.class);
+    Repo repo = TestUtils.loadJson("mock/repos/get_repo.json", Repo.class);
     setUpSuccess();
     initializePresenter();
     presenter.onRepoClicked(repo);
 
-    verify(screenNavigator).goToRepoDetails(repo.owner().login(),repo.name());
+    verify(screenNavigator).goToRepoDetails(repo.owner().login(), repo.name());
   }
 
   private List<Repo> setUpSuccess() {
@@ -109,6 +110,8 @@ public class TrendingReposPresenterTest {
   }
 
   private void initializePresenter() {
-    presenter = new TrendingReposPresenter(viewModel, repoRepository,screenNavigator);
+    presenter =
+        new TrendingReposPresenter(viewModel, repoRepository, screenNavigator, Mockito.mock(
+            DisposableManager.class));
   }
 }

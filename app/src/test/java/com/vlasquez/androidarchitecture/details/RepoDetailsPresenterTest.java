@@ -2,6 +2,7 @@ package com.vlasquez.androidarchitecture.details;
 
 import com.squareup.moshi.Types;
 import com.vlasquez.androidarchitecture.data.RepoRepository;
+import com.vlasquez.androidarchitecture.lifecycle.DisposableManager;
 import com.vlasquez.androidarchitecture.model.Contributor;
 import com.vlasquez.androidarchitecture.model.Repo;
 import com.vlasquez.androidarchitecture.testUtils.TestUtils;
@@ -12,6 +13,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.verify;
@@ -30,8 +32,9 @@ public class RepoDetailsPresenterTest {
   @Mock Consumer<Throwable> contributorErrorConsumer;
 
   private Repo repo = TestUtils.loadJson("mock/repos/get_repo.json", Repo.class);
-  private List<Contributor> contributors = TestUtils.loadJson("mock/repos/contributors/get_contributors.json",
-      Types.newParameterizedType(List.class, Contributor.class));
+  private List<Contributor> contributors =
+      TestUtils.loadJson("mock/repos/contributors/get_contributors.json",
+          Types.newParameterizedType(List.class, Contributor.class));
   private String contributorsUrl = repo.contributorsUrl();
 
   @Before
@@ -82,6 +85,7 @@ public class RepoDetailsPresenterTest {
   }
 
   private void initPresenter() {
-    new RepoDetailsPresenter(OWNER, NAME, repoRepository, repoDetailsViewModel);
+    new RepoDetailsPresenter(OWNER, NAME, repoRepository, repoDetailsViewModel, Mockito.mock(
+        DisposableManager.class));
   }
 }
