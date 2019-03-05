@@ -1,11 +1,8 @@
 package com.vlasquez.androidarchitecture.trending;
 
 import com.vlasquez.androidarchitecture.R;
-import com.vlasquez.androidarchitecture.data.TrendingReposResponse;
-import com.vlasquez.androidarchitecture.testUtils.TestUtils;
 import io.reactivex.observers.TestObserver;
 import java.io.IOException;
-import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,17 +32,8 @@ public class TrendingReposViewModelTest {
   public void error() throws Exception {
     TestObserver<Integer> errorObserver = viewModel.error().test();
     viewModel.onError().accept(new IOException());
-    viewModel.reposUpdated().accept(Collections.emptyList());
+    viewModel.reposUpdated().run();
 
     errorObserver.assertValues(R.string.api_error_repos, -1);
-  }
-
-  @Test
-  public void repos() throws Exception {
-    TrendingReposResponse response =
-        TestUtils.loadJson("mock/search/get_trending_repos.json", TrendingReposResponse.class);
-    viewModel.reposUpdated().accept(response.repos());
-
-    viewModel.repos().test().assertValue(response.repos());
   }
 }

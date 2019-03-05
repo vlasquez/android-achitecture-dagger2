@@ -1,12 +1,9 @@
 package com.vlasquez.androidarchitecture.details;
 
-import com.squareup.moshi.Types;
 import com.vlasquez.androidarchitecture.R;
-import com.vlasquez.androidarchitecture.model.Contributor;
 import com.vlasquez.androidarchitecture.model.Repo;
 import com.vlasquez.androidarchitecture.testUtils.TestUtils;
 import java.io.IOException;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,9 +12,6 @@ public class RepoDetailsViewModelTest {
   private RepoDetailsViewModel viewModel;
 
   private Repo repo = TestUtils.loadJson("mock/repos/get_repo.json", Repo.class);
-  private List<Contributor> contributorsList =
-      TestUtils.loadJson("mock/repos/contributors/get_contributors.json",
-          Types.newParameterizedType(List.class, Contributor.class));
 
   @Before
   public void setUp() throws Exception {
@@ -52,11 +46,10 @@ public class RepoDetailsViewModelTest {
 
   @Test
   public void contributors() throws Exception {
-    viewModel.processContributors().accept(contributorsList);
+    viewModel.contributorsLoaded().accept(new Object());
 
     viewModel.contributors().test().assertValue(ContributorState.builder()
         .loading(false)
-        .contributors(contributorsList)
         .build());
   }
 
