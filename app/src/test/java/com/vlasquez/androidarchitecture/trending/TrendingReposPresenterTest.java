@@ -6,8 +6,11 @@ import com.vlasquez.androidarchitecture.lifecycle.DisposableManager;
 import com.vlasquez.androidarchitecture.model.Repo;
 import com.vlasquez.androidarchitecture.testUtils.TestUtils;
 import com.vlasquez.androidarchitecture.ui.ScreenNavigator;
+import com.vlasquez.poweradapter.adapter.RecyclerDataSource;
 import io.reactivex.Single;
+import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.io.IOException;
 import java.util.List;
 import org.junit.Before;
@@ -26,12 +29,17 @@ import static org.mockito.Mockito.when;
  * @since 2/18/19
  **/
 public class TrendingReposPresenterTest {
+  static {
+    RxAndroidPlugins.setInitMainThreadSchedulerHandler(
+        schedulerCallable -> Schedulers.trampoline());
+  }
+
   @Mock RepoRepository repoRepository;
   @Mock TrendingReposViewModel viewModel;
   @Mock Consumer<Throwable> onErrorConsumer;
-  @Mock Consumer<List<Repo>> onSuccessConsumer;
   @Mock Consumer<Boolean> loadingConsumer;
   @Mock ScreenNavigator screenNavigator;
+  @Mock RecyclerDataSource recyclerDataSource;
 
   private TrendingReposPresenter presenter;
 
@@ -40,7 +48,8 @@ public class TrendingReposPresenterTest {
     MockitoAnnotations.initMocks(this);
     when(viewModel.loadingUpdated()).thenReturn(loadingConsumer);
     when(viewModel.onError()).thenReturn(onErrorConsumer);
-    when(viewModel.reposUpdated()).thenReturn(onSuccessConsumer);
+    when(viewModel.reposUpdated()).thenReturn(() -> {
+    });
   }
 
   @Test
@@ -49,7 +58,7 @@ public class TrendingReposPresenterTest {
     initializePresenter();
 
     verify(repoRepository).getTrendingRepos();
-    verify(onSuccessConsumer).accept(repos);
+    verify(recyclerDataSource).setData(repos);
     verifyZeroInteractions(onErrorConsumer);
   }
 
@@ -59,7 +68,7 @@ public class TrendingReposPresenterTest {
     initializePresenter();
 
     verify(onErrorConsumer).accept(error);
-    verifyZeroInteractions(onSuccessConsumer);
+    verifyZeroInteractions(recyclerDataSource);
   }
 
   @Test
@@ -112,6 +121,6 @@ public class TrendingReposPresenterTest {
   private void initializePresenter() {
     presenter =
         new TrendingReposPresenter(viewModel, repoRepository, screenNavigator, Mockito.mock(
-            DisposableManager.class));
+            DisposableManager.class), recyclerDataSource);
   }
 }

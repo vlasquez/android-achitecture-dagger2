@@ -10,6 +10,8 @@ import butterknife.BindView;
 import com.bluelinelabs.conductor.Controller;
 import com.vlasquez.androidarchitecture.R;
 import com.vlasquez.androidarchitecture.base.BaseController;
+import com.vlasquez.poweradapter.adapter.RecyclerAdapter;
+import com.vlasquez.poweradapter.adapter.RecyclerDataSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import javax.inject.Inject;
@@ -29,6 +31,7 @@ public class RepoDetailsController extends BaseController {
 
   @Inject RepoDetailsViewModel viewModel;
   @Inject RepoDetailsPresenter presenter;
+  @Inject RecyclerDataSource dataSource;
 
   @BindView(R.id.tv_repo_name) TextView repoNameText;
   @BindView(R.id.tv_repo_description) TextView repoDescriptionText;
@@ -43,7 +46,7 @@ public class RepoDetailsController extends BaseController {
 
   @Override protected void onViewBound(View view) {
     contributorListRv.setLayoutManager(new LinearLayoutManager(view.getContext()));
-    contributorListRv.setAdapter(new ContributorAdapter());
+    contributorListRv.setAdapter(new RecyclerAdapter(dataSource));
   }
 
   @Override protected Disposable[] subscriptions() {
@@ -88,8 +91,6 @@ public class RepoDetailsController extends BaseController {
                 contributorState.isSuccess() ? View.GONE : View.VISIBLE);
             if (contributorState.isSuccess()) {
               contributorsErrorText.setText(null);
-              ((ContributorAdapter) contributorListRv.getAdapter()).setData(
-                  contributorState.contributors());
             } else {
               //noinspection ConstantConditions
               contributorsErrorText.setText(contributorState.errorRes());

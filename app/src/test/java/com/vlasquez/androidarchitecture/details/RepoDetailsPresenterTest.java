@@ -6,8 +6,11 @@ import com.vlasquez.androidarchitecture.lifecycle.DisposableManager;
 import com.vlasquez.androidarchitecture.model.Contributor;
 import com.vlasquez.androidarchitecture.model.Repo;
 import com.vlasquez.androidarchitecture.testUtils.TestUtils;
+import com.vlasquez.poweradapter.adapter.RecyclerDataSource;
 import io.reactivex.Single;
+import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import java.io.IOException;
 import java.util.List;
 import org.junit.Before;
@@ -21,15 +24,21 @@ import static org.mockito.Mockito.when;
 
 public class RepoDetailsPresenterTest {
 
+  static {
+    RxAndroidPlugins.setInitMainThreadSchedulerHandler(
+        schedulerCallable -> Schedulers.trampoline());
+  }
+
   private static final String OWNER = "owner";
   private static final String NAME = "name";
 
   @Mock RepoRepository repoRepository;
   @Mock RepoDetailsViewModel repoDetailsViewModel;
   @Mock Consumer<Repo> repoConsumer;
-  @Mock Consumer<List<Contributor>> contributorConsumer;
+  @Mock Consumer<Object> contributorConsumer;
   @Mock Consumer<Throwable> detailErrorConsumer;
   @Mock Consumer<Throwable> contributorErrorConsumer;
+  @Mock RecyclerDataSource dataSource;
 
   private Repo repo = TestUtils.loadJson("mock/repos/get_repo.json", Repo.class);
   private List<Contributor> contributors =
@@ -42,7 +51,7 @@ public class RepoDetailsPresenterTest {
     MockitoAnnotations.initMocks(this);
 
     when(repoDetailsViewModel.processRepo()).thenReturn(repoConsumer);
-    when(repoDetailsViewModel.processContributors()).thenReturn(contributorConsumer);
+    when(repoDetailsViewModel.contributorsLoaded()).thenReturn(contributorConsumer);
     when(repoDetailsViewModel.detailsError()).thenReturn(detailErrorConsumer);
     when(repoDetailsViewModel.contributorsError()).thenReturn(contributorErrorConsumer);
 
@@ -68,7 +77,7 @@ public class RepoDetailsPresenterTest {
   @Test
   public void repoContributors() throws Exception {
     initPresenter();
-    verify(contributorConsumer).accept(contributors);
+    verify(dataSource).setData(contributors);
   }
 
   @Test
@@ -86,6 +95,6 @@ public class RepoDetailsPresenterTest {
 
   private void initPresenter() {
     new RepoDetailsPresenter(OWNER, NAME, repoRepository, repoDetailsViewModel, Mockito.mock(
-        DisposableManager.class));
+        DisposableManager.class), dataSource);
   }
 }
