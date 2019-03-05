@@ -74,6 +74,13 @@ dependencies {
   /** Glide **/
   implementation "com.github.bumptech.glide:glide:$glideVersion"
 
+
+  /** Android Architecture Components **/
+
+  implementation "android.arch.persistence.room:runtime:$archComponentsVersion"
+  implementation "android.arch.persistence.room:rxjava2:$archComponentsVersion"
+  annotationProcessor "android.arch.persistence.room:compiler:$archComponentsVersion"
+
   testImplementation "org.mockito:mockito-core:$mockitoVersion"
   testImplementation 'junit:junit:4.12'
 

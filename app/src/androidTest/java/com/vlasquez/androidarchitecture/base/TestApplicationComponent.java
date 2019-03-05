@@ -3,9 +3,9 @@ package com.vlasquez.androidarchitecture.base;
 import com.vlasquez.androidarchitecture.data.RepoRepository;
 import com.vlasquez.androidarchitecture.data.TestRepoService;
 import com.vlasquez.androidarchitecture.data.TestRepoServiceModule;
+import com.vlasquez.androidarchitecture.database.DatabaseModule;
 import com.vlasquez.androidarchitecture.networking.ServiceModule;
 import com.vlasquez.androidarchitecture.trending.TrendingReposControllerTest;
-import com.vlasquez.androidarchitecture.ui.NavigationModule;
 import com.vlasquez.androidarchitecture.ui.TestActivityViewInterceptorModule;
 import com.vlasquez.androidarchitecture.ui.TestNavigationModule;
 import com.vlasquez.androidarchitecture.ui.TestScreenNavigator;
@@ -19,7 +19,8 @@ import javax.inject.Singleton;
     TestRepoServiceModule.class,
     ServiceModule.class,
     TestNavigationModule.class,
-    TestActivityViewInterceptorModule.class
+    TestActivityViewInterceptorModule.class,
+    DatabaseModule.class
 })
 public interface TestApplicationComponent extends ApplicationComponent {
 

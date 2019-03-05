@@ -41,6 +41,7 @@ ext {
   loggingHttpInterceptorVersion = '3.13.0'
   mockitoVersion = '2.10.0'
   glideVersion = '4.2.0'
+  archComponentsVersion = '1.0.0'
 }
 task clean(type: Delete) {
   delete rootProject.buildDir
